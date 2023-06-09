@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @stack('meta')
+    <meta name="application-name" content="Đoán Xem" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@stack('title')</title>
+    <link rel="icon" href="{!! asset('theme/images/Logodoanxem.png') !!}" type="image/x-icon" sizes="16x16">
+    <link rel="icon" href="{!! asset('theme/images/Logodoanxem.png') !!}" type="image/x-icon" sizes="24x24">
+    <link rel="icon" href="{!! asset('theme/images/Logodoanxem.png') !!}" type="image/x-icon" sizes="32x32">
+    <link rel="icon" href="{!! asset('theme/images/Logodoanxem.png') !!}" type="image/x-icon" sizes="64x64">
+    <link rel="icon" href="{!! asset('theme/images/Logodoanxem.png') !!}" type="image/x-icon" sizes="96x96">
+    <link rel="stylesheet" href="{!! asset('/theme/css/main.min.css') !!}">
+    <link rel="stylesheet" href="{!! asset('theme/css/style.css') !!}">
+    <link rel="stylesheet" href="{!! asset('/theme/css/color.css') !!}">
+    <link rel="stylesheet" href="{!! asset('/theme/css/responsive.css') !!}">
+    <link rel="stylesheet" href="{!! asset('/theme/fonts/icons/fontawesome/css/font-awesome.min.css') !!}">
+    @stack('css')
+    @vite('resources/js/app.js')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jquery-form/form@4.3.0/dist/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+    {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.14.0/echo.min.js" integrity="sha512-jCxbR9pml3/QJvAPAs0VZlhtWTT0EaYVFnW7HWM8omFOfPU+0m2u3xRQWbpcp00Sn/OV5gR8IY46GTet4WmXuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>--}}
+</head>
+<body>
+{{--<div class="page-loader" id="page-loader">--}}
+{{--    <div class="loader"><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span><span class="loader-item"></span></div>--}}
+{{--</div><!-- page loader -->--}}
+<div class="theme-layout" style="overflow-x: hidden">
+
+    <div class="responsive-header">
+        <div style="cursor: pointer;" class="logo res" onclick="redirectTo('/home')"><img src="../../../app-assets\images\logo\Logodoanxem.png" alt=""><span>ĐX</span></div>
+        <div class="user-avatar mobile">
+            @if (auth()->user())
+                <!-- ảnh của user -->
+                <a href="/member/user/{{Auth::user()->user_uuid}}/posted-list" title="View Profile">
+                    <img style="height: 30px;width: 30px" src="{{ Auth::user()->avatar }}">
+                </a>
+                <!-- tên của user -->
+                <div id="name-member" class="name">
+                    <h4>{{ Auth::user()->name }}</h4>
+                </div>
+            @else
+                <a href="/login" title="View Profile">
+                    <img alt="" src="/theme/images/resources/default-user.jpg">
+                </a>
+                <div class="name">
+                    <h4>Khách</h4>
+                </div>
+            @endif
+        </div>
+        <div class="right-compact">
+            <div class="sidemenu">
+                <i>
+                    <svg id="side-menu2"
+                         xmlns="http://www.w3.org/2000/svg"
+                         width="26" height="26" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2"
+                         stroke-linecap="round" stroke-linejoin="round"
+                         class="feather feather-menu">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </i>
+            </div>
+            {{--            <div class="res-search">--}}
+            {{--				<span>--}}
+            {{--<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>--}}
+            {{--            </div>--}}
+
+        </div>
+        {{--        <div class="restop-search">--}}
+        {{--            <span class="hide-search"><i class="icofont-close-circled"></i></span>--}}
+        <!-- thanh tìm kiếm mobile -->
+        {{--            <form method="post" action="#">--}}
+        {{--                <input type="text" placeholder="Search...">--}}
+        {{--            </form>--}}
+        {{--        </div>--}}
+    </div><!-- responsive header -->
+
+    <header class="">
+        <div class="topbar stick">
+            <div style="padding-left:11%;cursor: pointer"
+                 class="logo" onclick="redirectTo('/home')">
+                <img src="../../../app-assets\images\logo\Logodoanxem.png" alt=""
+                >
+                <span>Đoán Xem</span>
+            </div>
+            {{--            <div class="searches">--}}
+            <!-- thanh tìm kiếm web -->
+            {{--                <form method="post" action="#">--}}
+            {{--                    <input type="text" placeholder="Search...">--}}
+            {{--                    <button type="submit"><i class="icofont-search"></i></button>--}}
+            {{--                    <span class="cancel-search"><i class="icofont-close"></i></span>--}}
+            <!-- gợi ý debounce query ? -->
+            {{--                    <div class="recent-search">--}}
+            {{--                        <h4 class="recent-searches">Your's Recent Search</h4>--}}
+            {{--                        <ul class="so-history">--}}
+            {{--                            <li>--}}
+            {{--                                <div class="searched-user">--}}
+            {{--                                    <figure><img src="/theme/images/resources/user1.jpg" alt=""></figure>--}}
+            {{--                                    <span>Danial Carabal</span>--}}
+            {{--                                </div>--}}
+            {{--                                <span class="trash"><i class="icofont-close-circled"></i></span>--}}
+            {{--                            </li>--}}
+            {{--                            <li>--}}
+            {{--                                <div class="searched-user">--}}
+            {{--                                    <figure><img src="/theme/images/resources/user2.jpg" alt=""></figure>--}}
+            {{--                                    <span>Maria K</span>--}}
+            {{--                                </div>--}}
+            {{--                                <span class="trash"><i class="icofont-close-circled"></i></span>--}}
+            {{--                            </li>--}}
+            {{--                            <li>--}}
+            {{--                                <div class="searched-user">--}}
+            {{--                                    <figure><img src="/theme/images/resources/user3.jpg" alt=""></figure>--}}
+            {{--                                    <span>Fawad Khan</span>--}}
+            {{--                                </div>--}}
+            {{--                                <span class="trash"><i class="icofont-close-circled"></i></span>--}}
+            {{--                            </li>--}}
+            {{--                            <li>--}}
+            {{--                                <div class="searched-user">--}}
+            {{--                                    <figure><img src="/theme/images/resources/user4.jpg" alt=""></figure>--}}
+            {{--                                    <span>Danial Sandos</span>--}}
+            {{--                                </div>--}}
+            {{--                                <span class="trash"><i class="icofont-close-circled"></i></span>--}}
+            {{--                            </li>--}}
+            {{--                            <li>--}}
+            {{--                                <div class="searched-user">--}}
+            {{--                                    <figure><img src="/theme/images/resources/user5.jpg" alt=""></figure>--}}
+            {{--                                    <span>Jack Carter</span>--}}
+            {{--                                </div>--}}
+            {{--                                <span class="trash"><i class="icofont-close-circled"></i></span>--}}
+            {{--                            </li>--}}
+            {{--                        </ul>--}}
+            {{--                    </div>--}}
+            {{--                </form>--}}
+            {{--            </div>--}}
+            <ul style="padding-right:11%" class="web-elements">
+                <li>
+                    <div class="user-dp">
+                        @if (auth()->user())
+                            <a href="/member/user/{{Auth::user()->user_uuid}}/posted-list" title="">
+                                <img alt="" src="{{ Auth::user()->avatar }}">
+                                <div class="name">
+                                    <h4>{{ Auth::user()->name }}</h4>
+                                </div>
+                            </a>
+                        @endif
+                        @if(!auth()->user())
+                            <a href="/login" title="">
+                                <img alt="" src="/theme/images/resources/default-user.jpg">
+                                <div class="name">
+                                    <h4>Khách</h4>
+                                </div>
+                            </a>
+                        @endif
+                    </div>
+                </li>
+                <!-- đường dẫn đến landingPage -->
+                <li>
+                    <a href="/" title="Trang chủ" data-toggle="tooltip">
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></i>
+                    </a>
+                </li>
+                @if(auth()->user())
+                    <li>
+                        <a class="create" href="{{-- đường link đến tạo post --}}" title="Tạo mới" data-toggle="tooltip">
+                            <i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></i>
+                        </a>
+                    </li>
+                @endif
+                <li>
+                    <a href="#" title="">
+                        <i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        </i>
+                    </a>
+                    <ul class="dropdown">
+                        {{--                        <li><a href="http://wpkixx.com/html/socimo/profile.html" title=""><i class="icofont-user-alt-3"></i> Your Profile</a></li>--}}
+                        <li><a class="dark-mod" href="#" title=""><i class="icofont-moon"></i> Dark Mode</a></li>
+                        @if(auth()->user())
+                            <li class="logout">
+
+                                <a onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="icofont-power"></i>Đăng Xuất</a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                      style="display: none;">
+                                    @csrf
+                                </form>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <ul class="active menu-slide">
+            {{--            @if(auth()->user())--}}
+            {{--                <li class="menu-item" >--}}
+            {{--                    <a class="create" href="--}}{{-- đường link đến tạo post --}}{{--" title="Add New" data-toggle="tooltip">--}}
+            {{--                        <i>--}}
+            {{--                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></i>--}}
+            {{--                        Add Post--}}
+            {{--                    </a>--}}
+            {{--                </li>--}}
+            {{--            @endif--}}
+            <li class="menu-item-has-children">
+                <a class="" href="#" title="">
+                    <i><svg id="icon-home" class="feather feather-home" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="14" width="14" xmlns="http://www.w3.org/2000/svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></i> Trang chủ
+                </a>
+                <ul class="submenu">
+                    {{--                    <li><a href="--}}{{-- đường dẫn đến trang chủ mobile --}}{{--" title="">News</a></li>--}}
+                    {{-- @if(Auth) --}}
+                    {{--                    <li><a href="--}}{{-- đường dẫn đến profile mobile --}}{{--" title="">User Profile</a></li>--}}
+                    {{--                    <li><a href="--}}{{-- đường dẫn đến post của bạn --}}{{--">Your's Posts</a></li>--}}
+                    {{-- @endif --}}
+                </ul>
+            </li>
+            <li class="menu-item-has-children">
+                <a class="" href="#" title="">
+                    <i class="">
+                        <svg id="ab9" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></i> Authentications
+                </a>
+                <ul class="submenu">
+                    @if(!Auth::user())
+                        <li><a href="/login" title="">Sign In</a></li>
+                        <li><a href="/register" title="">Sign Up</a></li>
+                        <li><a href="/forgot-password" title="">Forgot Password</a></li>
+                    @endif
+                    @if(Auth::user())
+                        <li><a>Reset Password</a></li>
+                        <li><a>Change Email</a></li>
+                        <li>
+
+                            <a onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="icofont-power"></i> Logout</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                  style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    @endif
+                </ul>
+            </li>
+
+        </ul>
+    </nav><!-- nav sidebar -->
+
+    {{--    <section>--}}
+    {{--        <div class="white-bg">--}}
+    {{--            <div class="container-fluid">--}}
+    {{--                <div class="menu-caro">--}}
+    {{--                    <div class="row">--}}
+    {{--                        <div class="col-lg-2">--}}
+    {{--                            <div class="sidemenu">--}}
+    {{--                                <i>--}}
+    {{--                                    <svg id="side-menu" xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></i>--}}
+    {{--                            </div>--}}
+    {{--                        </div>--}}
+    {{--                        <div class="col-lg-8">--}}
+    {{--                            <div class="page-caro">--}}
+    {{--                                <div class="link-item">--}}
+    {{--                                    <a class="active" href="http://wpkixx.com/html/socimo/feed.html" title="">--}}
+    {{--                                        <i class="">--}}
+    {{--                                            <svg class="feather feather-zap" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>--}}
+    {{--                                        </i>--}}
+    {{--                                        <p>What News</p>--}}
+    {{--                                    </a>--}}
+    {{--                                </div>--}}
+    {{--                                 @if(Auth::user())--}}
+    {{--                                <div class="link-item">--}}
+    {{--                                    <a href="blog.html" title="">--}}
+    {{--                                        <i class=""><svg class="feather feather-layout" stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="currentColor" fill="none" viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg"><rect ry="2" rx="2" height="18" width="18" y="3" x="3"/><line y2="9" x2="21" y1="9" x1="3"/><line y2="9" x2="9" y1="21" x1="9"/></svg></i>--}}
+    {{--                                        <p>Your's Posts</p>--}}
+    {{--                                    </a>--}}
+    {{--                                </div>--}}
+    {{--                                 @endif--}}
+    {{--                            </div>--}}
+    <!-- Reaction followers chưa làm -->
+    {{--                        <div class="col-lg-2">--}}
+    {{--                            <div class="user-inf">--}}
+    {{--                                <div class="folowerz">Followers: 204</div>--}}
+    {{--                                <ul class="stars">--}}
+    {{--                                    <li><i class="icofont-star"></i></li>--}}
+    {{--                                    <li><i class="icofont-star"></i></li>--}}
+    {{--                                    <li><i class="icofont-star"></i></li>--}}
+    {{--                                    <li><i class="icofont-star"></i></li>--}}
+    {{--                                    <li><i class="icofont-star"></i></li>--}}
+    {{--                                </ul>--}}
+    {{--                            </div>--}}
+    {{--                        </div>--}}
+    {{--                    </div>--}}
+    {{--                </div>--}}
+    {{--            </div>--}}
+    {{--        </div>--}}
+    {{--    </section>--}}
+
+    @yield('content')
+
+    <figure class="bottom-mockup"><img src="/theme/images/footer.png" alt=""></figure>
+    <div class="bottombar">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <span class="">&copy; copyright All rights reserved by sPhoton 2022</span>
+                </div>
+            </div>
+        </div>
+    </div><!-- bottombar -->
+    @if(auth()->user())
+        <div class="post-new-popup">
+            <div class="popup" style="width: 800px;">
+                <span class="popup-closed"><i class="icofont-close"></i></span>
+                <div class="popup-meta">
+                    <div class="popup-head">
+                        <h5><i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></i>Tạo bài viết mới</h5>
+                    </div>
+                    <div class="post-new">
+                        <div class="post-newmeta">
+                            {{--                        <ul class="post-categoroes">--}}
+                            {{--                            <li><i class="icofont-camera"></i> Photo / Video</li>--}}
+                            {{--                            <li><i class="icofont-google-map"></i> Post Location</li>--}}
+                            {{--                            <li><i class="icofont-file-gif"></i> Post Gif</li>--}}
+                            {{--                            <li><i class="icofont-ui-tag"></i> Tag to Friend</li>--}}
+                            {{--                            <li><i class="icofont-users"></i> Share in Group</li>--}}
+                            {{--                            <li><i class="icofont-link"></i> Share Link</li>--}}
+                            {{--                            <li><i class="icofont-video-cam"></i> Go Live</li>--}}
+                            {{--                            <li><i class="icofont-sale-discount"></i> Post Online Course</li>--}}
+                            {{--                            <li><i class="icofont-read-book"></i> Post A Book</li>--}}
+                            {{--                            <li><i class="icofont-globe"></i> Post an Ad</li>--}}
+                            {{--                        </ul>--}}
+                            @if(auth()->user())
+                                <form id="my-drop" method="post" class="dropzone" action="/member/user/{{ auth()->user()->user_uuid }}/post-file-url" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="fallback">
+                                        <input name="file" type="file"/>
+                                    </div>
+                                </form>
+                        </div>
+                        <form id="create-post-form" method="post" class="c-form" action="/member/user/{{ auth()->user()->user_uuid }}/create-post" onsubmit="handleCreatePost('{{ csrf_token() }}')">
+                            @csrf
+                            <textarea {{--id="emojionearea1"--}} placeholder="Bạn đang nghĩ gì ?" name="title" required></textarea>
+                            {{--                        <div class="activity-post">--}}
+                            {{--                            <div class="checkbox">--}}
+                            {{--                                <input type="checkbox" id="checkbox" checked>--}}
+                            {{--                                <label for="checkbox"><span>Activity Feed</span></label>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="checkbox">--}}
+                            {{--                                <input type="checkbox" id="checkbox2" checked>--}}
+                            {{--                                <label for="checkbox2"><span>My Story</span></label>--}}
+                            {{--                            </div>--}}
+                            {{--                        </div>--}}
+                            {{--                        <div class="select-box">--}}
+                            {{--                            <div class="select-box__current" tabindex="1">--}}
+                            {{--                                <div class="select-box__value"><input class="select-box__input" type="radio" id="0" value="1" name="Ben" checked="checked" />--}}
+                            {{--                                    <p class="select-box__input-text"><i class="icofont-globe-alt"></i> Public</p>--}}
+                            {{--                                </div>--}}
+                            {{--                                <div class="select-box__value"><input class="select-box__input" type="radio" id="1" value="2" name="Ben" checked="checked" />--}}
+                            {{--                                    <p class="select-box__input-text"><i class="icofont-lock"></i> Private</p>--}}
+                            {{--                                </div>--}}
+                            {{--                                <div class="select-box__value"><input class="select-box__input" type="radio" id="2" value="3" name="Ben" checked="checked" />--}}
+                            {{--                                    <p class="select-box__input-text"><i class="icofont-user"></i> Specific Friend</p>--}}
+                            {{--                                </div>--}}
+                            {{--                                <div class="select-box__value"><input class="select-box__input" type="radio" id="3" value="4" name="Ben" checked="checked" />--}}
+                            {{--                                    <p class="select-box__input-text"><i class="icofont-star"></i> Only Friends</p>--}}
+                            {{--                                </div>--}}
+                            {{--                                <div class="select-box__value"><input class="select-box__input" type="radio" id="4" value="5" name="Ben" checked="checked" />--}}
+                            {{--                                    <p class="select-box__input-text"><i class="icofont-users-alt-3"></i> Joined Groups</p>--}}
+                            {{--                                </div>--}}
+                            {{--                                <img class="select-box__icon" src="/theme/images/arrow-down.svg" alt="Arrow Icon" aria-hidden="true" />--}}
+                            {{--                            </div>--}}
+                            {{--                            <ul class="select-box__list">--}}
+                            {{--                                <li><label class="select-box__option" for="0"><i class="icofont-globe-alt"></i> Public</label></li>--}}
+                            {{--                                <li><label class="select-box__option" for="1"><i class="icofont-lock"></i> Private</label></li>--}}
+                            {{--                                <li><label class="select-box__option" for="2"><i class="icofont-user"></i> Specific Friend</label></li>--}}
+                            {{--                                <li><label class="select-box__option" for="3"><i class="icofont-star"></i> Only Friends</label></li>--}}
+                            {{--                                <li><label class="select-box__option" for="4"><i class="icofont-users-alt-3"></i> Joined Groups</label></li>--}}
+                            {{--                            </ul>--}}
+                            {{--                        </div>--}}
+                            {{--                        <input class="schedule-btn" type="text" id="datetimepicker" readonly>--}}
+                            {{--                        <input type="text" placeholder="https://www.youtube.com/watch?v=vgvsuiFlA-Y&t=56s">--}}
+                            <input name="thumbnail" type="hidden" >
+                            <input name="image_uuid" type="hidden" >
+                            <input name="image_url" type="hidden" required>
+                            <button id="create-post-form-button" type="submit" class="main-btn" disabled>Đăng bài</button>
+                        </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+    @yield('modal-pop-up')
+    {{--    <button style="" class="btn btn-primary btn-icon scroll-top" type="button"><i data-feather='plus-circle'></i></button>--}}
+
+</div>
+@if(auth()->user())
+    <button style="position: fixed;z-index: 500; right: 5px;width: 40px; height: 40px;top: 85%; border-radius: 30px" class="btn btn-primary btn-icon" type="button">
+        <a  class="create"
+            @if (auth()->user())
+            @else
+                onclick="redirectTo('/login')"
+            @endif
+            title="Tạo mới"
+            data-toggle="tooltip">
+            <i class="icofont-plus-circle"></i>
+        </a>
+    </button>
+@endif
+<script src="/theme/js/main.min.js"></script>
+<script src="/theme/js/script.js"></script>
+<script src="/theme/js/date-time.js"></script>
+<script async src="https://static.addtoany.com/menu/page.js"></script>
+@if(auth()->user())
+    <script>
+        Dropzone.options.myDrop = {
+            maxFiles: 1,
+            url: "/member/user/{{ auth()->user()->user_uuid }}/post-file-url",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            addRemoveLinks: true,
+            init: function () {
+                this.on("complete",function(file){
+                    $('#create-post-form-button').removeAttr('disabled')
+                })
+                this.on("maxfilesexceeded", function(file) {
+                    this.removeAllFiles();
+                    this.addFile(file);
+                })
+                this.on("success",async function(file,response) {
+                    $('#create-post-form > input[name="thumbnail"]').val(response.data.thumbnail_url)
+                    $('#create-post-form > input[name="image_url"]').val(response.data.image_url)
+                    $('#create-post-form > input[name="image_uuid"]').val(response.data.image_uuid)
+                })
+                this.on("error",async function (file,response) {
+                    this.removeAllFiles();
+                    $('.popup-closed').click();
+                    Swal.fire({
+                        title: 'Lỗi',
+                        text: 'Có lỗi xảy ra vui lòng thử lại',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    });
+                })
+            }
+        }
+
+        function handleCreatePost(token) {
+            event.preventDefault();
+            let thumbnail = $('#create-post-form > input[name="thumbnail"]').val();
+            let image = $('#create-post-form > input[name="image_url"]').val();
+            let title = $('form#create-post-form textarea').val();
+            let uuid = $('#create-post-form > input[name="image_uuid"]').val();
+
+            $.ajax({
+                url: "/member/user/{{ auth()->user()->user_uuid }}/create-post",
+                data: {
+                    image: image,
+                    title: title,
+                    thumbnail: thumbnail,
+                    uuid: uuid
+                },
+                method: "post",
+                beforeSend: function(request) {
+                    request.setRequestHeader('X-CSRF-TOKEN',token)
+                }
+            }).done(response => {
+                if (!response) return;
+                Swal.fire({
+                    title: "Đăng thành công",
+                    text: "Di chuyển đến thành tựu của bạn?",
+                    confirmButtonText: "Đi",
+                    denyButtonText: "Ở lại",
+                });
+            }).fail(()=>{
+                Swal.fire({
+                    title: "Đăng không thành công!",
+                })
+            });
+            $('form#create-post-form textarea').val('');``
+            $('.post-new-popup').removeClass('active');
+        }
+
+        $('.create').on('click',function () {
+            $('button.dz-button').text('Kéo thả hoặc ấn vào để đăng ảnh/video')
+        })
+
+        function redirectTo (url) {
+            window.location.href = url;
+        }
+    </script>
+@else
+    <script>
+        function redirectTo (url) {
+            window.location.href = url;
+        }
+    </script>
+@endif
+@stack('scripts')
+</body>
+</html>
+
